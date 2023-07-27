@@ -233,19 +233,20 @@ jobs:
 #             name: ${{ github.event.repository.name }}-aarch64-linux-android.tar.gz
 
 # failed to run custom build command for `bevy-glsl-to-spirv v0.2.1`
-          - os_name: Linux-aarch64
-            os: ubuntu-20.04
-            target: aarch64-unknown-linux-gnu
-            bin: ${{ github.event.repository.name }}
-            name: ${{ github.event.repository.name }}-aarch64-unknown-linux-gnu.tar.gz
+# # panicked at 'Missing target support aarch64-unknown-linux-gnu', 
+#           - os_name: Linux-aarch64
+#             os: ubuntu-20.04
+#             target: aarch64-unknown-linux-gnu
+#             bin: ${{ github.event.repository.name }}
+#             name: ${{ github.event.repository.name }}-aarch64-unknown-linux-gnu.tar.gz
 
-# failed to run custom build command for `bevy-glsl-to-spirv v0.2.1`         
-          - os_name: Windows-aarch64
-            os: windows-latest
-            target: aarch64-pc-windows-msvc
-            bin: ${{ github.event.repository.name }}.exe
-            name: ${{ github.event.repository.name }}-aarch64-pc-windows-msvc.zip
-            skip_tests: true
+# failed to run custom build command for `bevy-glsl-to-spirv v0.2.1`   
+#           - os_name: Windows-aarch64
+#             os: windows-latest
+#             target: aarch64-pc-windows-msvc
+#             bin: ${{ github.event.repository.name }}.exe
+#             name: ${{ github.event.repository.name }}-aarch64-pc-windows-msvc.zip
+#             skip_tests: true
             
           - os_name: macOS-aarch64
             os: macos-12
