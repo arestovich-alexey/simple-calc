@@ -357,141 +357,140 @@ jobs:
           body_path: Changes.md
         if: matrix.toolchain == 'stable' && startsWith( github.ref, 'refs/tags/v' )
         
-  arm_release:
-    permissions: write-all
-    name: ${{ matrix.platform.os_name }} with rust ${{ matrix.toolchain }}
-    runs-on: ${{ matrix.platform.os }}
-    strategy:
-      matrix:
-        platform:
-# could not find system library 'alsa' required by the 'alsa-sys' 
-          - os_name: Linux-arm-musleabi
-            os: ubuntu-20.04
-            target: arm-unknown-linux-musleabi
-            bin: ${{ github.event.repository.name }}
-            name: ${{ github.event.repository.name }}-arm-unknown-linux-musleabi.tar.gz
-
-# # failed to run custom build command for `bevy-glsl-to-spirv v0.2.1`
-#           - os_name: Linux-arm-gnueabihf
+#   arm_release:
+#     permissions: write-all
+#     name: ${{ matrix.platform.os_name }} with rust ${{ matrix.toolchain }}
+#     runs-on: ${{ matrix.platform.os }}
+#     strategy:
+#       matrix:
+#         platform:
+# # could not find system library 'alsa' required by the 'alsa-sys' 
+#           - os_name: Linux-arm-musleabi
 #             os: ubuntu-20.04
-#             target: arm-unknown-linux-gnueabihf
+#             target: arm-unknown-linux-musleabi
 #             bin: ${{ github.event.repository.name }}
-#             name: ${{ github.event.repository.name }}-arm-unknown-linux-gnueabihf.tar.gz
+#             name: ${{ github.event.repository.name }}-arm-unknown-linux-musleabi.tar.gz
 
-# [WTF?] 
-# Package alsa was not found in the pkg-config search path.\nPerhaps you should add the directory containing `alsa.pc'\nto the PKG_CONFIG_PATH environment variable\nNo package 'alsa' found
-          - os_name: armv7-unknown-linux-gnueabi
-            os: ubuntu-20.04
-            target: armv7-unknown-linux-gnueabi
-            bin: ${{ github.event.repository.name }}
-            name: ${{ github.event.repository.name }}-armv7-unknown-linux-gnueabi.tar.gz
+# # # failed to run custom build command for `bevy-glsl-to-spirv v0.2.1`
+# #           - os_name: Linux-arm-gnueabihf
+# #             os: ubuntu-20.04
+# #             target: arm-unknown-linux-gnueabihf
+# #             bin: ${{ github.event.repository.name }}
+# #             name: ${{ github.event.repository.name }}-arm-unknown-linux-gnueabihf.tar.gz
 
-# could not find system library 'alsa' required by the 'alsa-sys' crate
-          - os_name: Linux-armv7-musleabi
-            os: ubuntu-20.04
-            target: armv7-unknown-linux-musleabi
-            bin: ${{ github.event.repository.name }}
-            name: ${{ github.event.repository.name }}-armv7-unknown-linux-musleabi.tar.gz
-        toolchain:
-          - stable
+# # #failed to run custom build command for `bevy-glsl-to-spirv v0.2.1`
+# #           - os_name: armv7-unknown-linux-gnueabi
+# #             os: ubuntu-20.04
+# #             target: armv7-unknown-linux-gnueabi
+# #             bin: ${{ github.event.repository.name }}
+# #             name: ${{ github.event.repository.name }}-armv7-unknown-linux-gnueabi.tar.gz
 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Cache cargo & target directories
-        uses: Swatinem/rust-cache@v2
+# # could not find system library 'alsa' required by the 'alsa-sys' crate
+#           - os_name: Linux-armv7-musleabi
+#             os: ubuntu-20.04
+#             target: armv7-unknown-linux-musleabi
+#             bin: ${{ github.event.repository.name }}
+#             name: ${{ github.event.repository.name }}-armv7-unknown-linux-musleabi.tar.gz
+#         toolchain:
+#           - stable
 
-      - name: Install musl-tools on Linux
-        run: sudo apt-get update --yes && sudo apt-get install --yes musl-tools
-        if: contains(matrix.platform.name, 'musl')
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Cache cargo & target directories
+#         uses: Swatinem/rust-cache@v2
+
+#       - name: Install musl-tools on Linux
+#         run: sudo apt-get update --yes && sudo apt-get install --yes musl-tools
+#         if: contains(matrix.platform.name, 'musl')
         
-      - name: Install libasound2-dev on Linux
-        run: sudo apt-get update --yes && sudo apt-get install --yes g++ pkg-config libx11-dev libasound2-dev libudev-dev
-        if: contains(matrix.platform.name, 'linux')
+#       - name: Install libasound2-dev on Linux
+#         run: sudo apt-get update --yes && sudo apt-get install --yes g++ pkg-config libx11-dev libasound2-dev libudev-dev
+#         if: contains(matrix.platform.name, 'linux')
 
-      - name: Install libunwind8-dev for Android
-        run: sudo apt-get update --yes && sudo apt-get install --yes android-libunwind-dev
-        if: contains(matrix.platform.target, 'aarch64-linux-android')
+#       - name: Install libunwind8-dev for Android
+#         run: sudo apt-get update --yes && sudo apt-get install --yes android-libunwind-dev
+#         if: contains(matrix.platform.target, 'aarch64-linux-android')
 
-      - name: Build binary
-        uses: houseabsolute/actions-rust-cross@v0
-        with:
-          command: "build"
-          target: ${{ matrix.platform.target }}
-          toolchain: ${{ matrix.toolchain }}
-          args: "--release"
-          strip: true
-        if: |
-          matrix.toolchain == 'stable' &&
-          contains(matrix.platform.target, 'aarch64-linux-android') == false &&
-          ( startsWith( github.ref, 'refs/tags/v' ) ||
-            github.ref == 'refs/tags/test-release' )
+#       - name: Build binary
+#         uses: houseabsolute/actions-rust-cross@v0
+#         with:
+#           command: "build"
+#           target: ${{ matrix.platform.target }}
+#           toolchain: ${{ matrix.toolchain }}
+#           args: "--release"
+#           strip: true
+#         if: |
+#           matrix.toolchain == 'stable' &&
+#           contains(matrix.platform.target, 'aarch64-linux-android') == false &&
+#           ( startsWith( github.ref, 'refs/tags/v' ) ||
+#             github.ref == 'refs/tags/test-release' )
             
-      - name: Build binary for aarch64-linux-android
-        shell: bash
-        run: |
-          rustup target add aarch64-linux-android
-          # Adapted from https://github.com/briansmith/ring/blob/main/mk/cargo.sh
-          set -eux -o pipefail
-          OS_NAME=$(uname -s | tr A-Z a-z)
+#       - name: Build binary for aarch64-linux-android
+#         shell: bash
+#         run: |
+#           rustup target add aarch64-linux-android
+#           # Adapted from https://github.com/briansmith/ring/blob/main/mk/cargo.sh
+#           set -eux -o pipefail
+#           OS_NAME=$(uname -s | tr A-Z a-z)
 
-          # Avoid putting the Android tools in `$PATH` because there are tools in this
-          # directory like `clang` that would conflict with the same-named tools that may
-          # be needed to compile the build script, or to compile for other targets.
-          if [ -n "${ANDROID_HOME-}" ]; then
-            # Keep the next line in sync with the corresponding line in install-build-tools.sh.
-            ndk_version=25.2.9519653
-            ANDROID_NDK_ROOT=${ANDROID_NDK_ROOT:-${ANDROID_HOME}/ndk/$ndk_version}
-          fi
-          if [ -n "${ANDROID_NDK_ROOT-}" ]; then
-            android_tools=${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/${OS_NAME}-x86_64/bin
-          fi
+#           # Avoid putting the Android tools in `$PATH` because there are tools in this
+#           # directory like `clang` that would conflict with the same-named tools that may
+#           # be needed to compile the build script, or to compile for other targets.
+#           if [ -n "${ANDROID_HOME-}" ]; then
+#             # Keep the next line in sync with the corresponding line in install-build-tools.sh.
+#             ndk_version=25.2.9519653
+#             ANDROID_NDK_ROOT=${ANDROID_NDK_ROOT:-${ANDROID_HOME}/ndk/$ndk_version}
+#           fi
+#           if [ -n "${ANDROID_NDK_ROOT-}" ]; then
+#             android_tools=${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/${OS_NAME}-x86_64/bin
+#           fi
           
-          export CC_aarch64_linux_android=$android_tools/aarch64-linux-android21-clang
-          export AR_aarch64_linux_android=$android_tools/llvm-ar
-          export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$android_tools/aarch64-linux-android21-clang
+#           export CC_aarch64_linux_android=$android_tools/aarch64-linux-android21-clang
+#           export AR_aarch64_linux_android=$android_tools/llvm-ar
+#           export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$android_tools/aarch64-linux-android21-clang
 
-          cargo build --verbose --release --target=aarch64-linux-android
-        if: |
-          matrix.toolchain == 'stable' &&
-          contains(matrix.platform.target, 'aarch64-linux-android') &&
-          ( startsWith( github.ref, 'refs/tags/v' ) ||
-            github.ref == 'refs/tags/test-release' )
+#           cargo build --verbose --release --target=aarch64-linux-android
+#         if: |
+#           matrix.toolchain == 'stable' &&
+#           contains(matrix.platform.target, 'aarch64-linux-android') &&
+#           ( startsWith( github.ref, 'refs/tags/v' ) ||
+#             github.ref == 'refs/tags/test-release' )
 
-      - name: Package as archive
-        shell: bash
-        run: |
-          echo running archive
-          cd target/${{ matrix.platform.target }}/release
-          if [[ "${{ matrix.platform.os }}" == "windows-latest" ]]; then
-            7z a ../../../${{ matrix.platform.name }} ${{ github.event.repository.name }}.exe
-          else
-            tar czvf ../../../${{ matrix.platform.name }} ${{ github.event.repository.name }}
-          fi
-          cd -
-        if: |
-          matrix.toolchain == 'stable' &&
-          ( startsWith( github.ref, 'refs/tags/v' ) ||
-            github.ref == 'refs/tags/test-release' )
+#       - name: Package as archive
+#         shell: bash
+#         run: |
+#           echo running archive
+#           cd target/${{ matrix.platform.target }}/release
+#           if [[ "${{ matrix.platform.os }}" == "windows-latest" ]]; then
+#             7z a ../../../${{ matrix.platform.name }} ${{ github.event.repository.name }}.exe
+#           else
+#             tar czvf ../../../${{ matrix.platform.name }} ${{ github.event.repository.name }}
+#           fi
+#           cd -
+#         if: |
+#           matrix.toolchain == 'stable' &&
+#           ( startsWith( github.ref, 'refs/tags/v' ) ||
+#             github.ref == 'refs/tags/test-release' )
 
-      - name: Publish release artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ github.event.repository.name }}-${{ matrix.platform.os_name }}
-          path: "${{ github.event.repository.name }}-*"
-        if: matrix.toolchain == 'stable'
+#       - name: Publish release artifacts
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: ${{ github.event.repository.name }}-${{ matrix.platform.os_name }}
+#           path: "${{ github.event.repository.name }}-*"
+#         if: matrix.toolchain == 'stable'
 
-      - name: Generate SHA-256
-        run: shasum -a 256 ${{ matrix.platform.name }}
-        if: |
-          matrix.toolchain == 'stable' &&
-            ( startsWith( github.ref, 'refs/tags/v' ) ||
-            github.ref == 'refs/tags/test-release' )
+#       - name: Generate SHA-256
+#         run: shasum -a 256 ${{ matrix.platform.name }}
+#         if: |
+#           matrix.toolchain == 'stable' &&
+#             ( startsWith( github.ref, 'refs/tags/v' ) ||
+#             github.ref == 'refs/tags/test-release' )
 
-      - name: Publish GitHub release
-        uses: softprops/action-gh-release@v1
-        with:
-          draft: true
-          files: "${{ github.event.repository.name }}-*"
-          body_path: Changes.md
-        if: matrix.toolchain == 'stable' && startsWith( github.ref, 'refs/tags/v' )
+#       - name: Publish GitHub release
+#         uses: softprops/action-gh-release@v1
+#         with:
+#           draft: true
+#           files: "${{ github.event.repository.name }}-*"
+#           body_path: Changes.md
+#         if: matrix.toolchain == 'stable' && startsWith( github.ref, 'refs/tags/v' )
          
