@@ -232,20 +232,22 @@ jobs:
             bin: ${{ github.event.repository.name }}
             name: ${{ github.event.repository.name }}-aarch64-linux-android.tar.gz
 
-# could not find system library 'alsa' required by the 'alsa-sys' crate
-          - os_name: Linux-aarch64
-            os: ubuntu-20.04
-            target: aarch64-unknown-linux-gnu
-            bin: ${{ github.event.repository.name }}
-            name: ${{ github.event.repository.name }}-aarch64-unknown-linux-gnu.tar.gz
-            
-# minimp3/minimp3.h(187): fatal error C1189: #error:  MINIMP3_ONLY_SIMD used, but SSE/NEON not enabled          
-          - os_name: Windows-aarch64
-            os: windows-latest
-            target: aarch64-pc-windows-msvc
-            bin: ${{ github.event.repository.name }}.exe
-            name: ${{ github.event.repository.name }}-aarch64-pc-windows-msvc.zip
-            skip_tests: true
+# # failed to run custom build command for `bevy-glsl-to-spirv v0.2.1`
+# # could not find system library 'alsa' required by the 'alsa-sys' crate
+#           - os_name: Linux-aarch64
+#             os: ubuntu-20.04
+#             target: aarch64-unknown-linux-gnu
+#             bin: ${{ github.event.repository.name }}
+#             name: ${{ github.event.repository.name }}-aarch64-unknown-linux-gnu.tar.gz
+
+# # failed to run custom build command for `bevy-glsl-to-spirv v0.2.1`
+# # minimp3/minimp3.h(187): fatal error C1189: #error:  MINIMP3_ONLY_SIMD used, but SSE/NEON not enabled          
+#           - os_name: Windows-aarch64
+#             os: windows-latest
+#             target: aarch64-pc-windows-msvc
+#             bin: ${{ github.event.repository.name }}.exe
+#             name: ${{ github.event.repository.name }}-aarch64-pc-windows-msvc.zip
+#             skip_tests: true
             
           - os_name: macOS-aarch64
             os: macos-12
@@ -267,7 +269,7 @@ jobs:
         if: contains(matrix.platform.name, 'musl')
         
       - name: Install libasound2-dev on Linux
-        run: sudo apt-get update --yes && sudo apt-get install --yes g++ pkg-config libx11-dev libasound2-dev libudev-dev
+        run: sudo apt-get update --yes && sudo apt-get install --yes clang pkg-config libx11-dev libasound2-dev libudev-dev
         if: contains(matrix.platform.name, 'linux')
 
       - name: Install libunwind8-dev for Android
