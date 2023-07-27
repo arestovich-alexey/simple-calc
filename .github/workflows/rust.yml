@@ -33,15 +33,13 @@ jobs:
 #             target: x86_64-unknown-linux-musl
 #             bin: ${{ github.event.repository.name }}
 #             name: ${{ github.event.repository.name }}-x86_64-unknown-linux-musl.tar.gz
-          
+
           - os_name: Linux-x86_64-gnu
             os: ubuntu-20.04
             target: x86_64-unknown-linux-gnu
             bin: ${{ github.event.repository.name }}
             name: ${{ github.event.repository.name }}-x86_64-unknown-linux-gnu.tar.gz
-            
 
-            
 #           - os_name: Linux-i686-musl
 #             os: ubuntu-20.04
 #             target: i686-unknown-linux-musl
@@ -74,12 +72,13 @@ jobs:
             target: x86_64-pc-windows-msvc
             bin: ${{ github.event.repository.name }}.exe
             name: ${{ github.event.repository.name }}-x86_64-pc-windows-msvc.zip
-          
-          - os_name: Windows-x86_64-gnu
-            os: windows-latest
-            target: x86_64-pc-windows-gnu
-            bin: ${{ github.event.repository.name }}.exe
-            name: ${{ github.event.repository.name }}-x86_64-pc-windows-gnu.zip
+
+# failed to run custom build command for `bevy-glsl-to-spirv v0.2.1`
+#           - os_name: Windows-x86_64-gnu
+#             os: windows-latest
+#             target: x86_64-pc-windows-gnu
+#             bin: ${{ github.event.repository.name }}.exe
+#             name: ${{ github.event.repository.name }}-x86_64-pc-windows-gnu.zip
 
 # 32 bit error
 #           - os_name: Windows-i686
@@ -88,13 +87,12 @@ jobs:
 #             bin: ${{ github.event.repository.name }}.exe
 #             name: ${{ github.event.repository.name }}-i686-pc-windows-msvc-i686.zip
 #             skip_tests: true
-          
+
           - os_name: macOS-x86_64
             os: macos-12
             target: x86_64-apple-darwin
             bin: ${{ github.event.repository.name }}
             name: ${{ github.event.repository.name }}-macOS-x86_64-apple-darwin.tar.gz
-            
 
 #           - os_name: Android-ARMv7a
 #             os: ubuntu-22.04
@@ -373,12 +371,12 @@ jobs:
             bin: ${{ github.event.repository.name }}
             name: ${{ github.event.repository.name }}-arm-unknown-linux-musleabi.tar.gz
 
-# could not find system library 'alsa' required by the 'alsa-sys' 
-          - os_name: Linux-arm-gnueabihf
-            os: ubuntu-20.04
-            target: arm-unknown-linux-gnueabihf
-            bin: ${{ github.event.repository.name }}
-            name: ${{ github.event.repository.name }}-arm-unknown-linux-gnueabihf.tar.gz
+# # failed to run custom build command for `bevy-glsl-to-spirv v0.2.1`
+#           - os_name: Linux-arm-gnueabihf
+#             os: ubuntu-20.04
+#             target: arm-unknown-linux-gnueabihf
+#             bin: ${{ github.event.repository.name }}
+#             name: ${{ github.event.repository.name }}-arm-unknown-linux-gnueabihf.tar.gz
 
 # [WTF?] 
 # Package alsa was not found in the pkg-config search path.\nPerhaps you should add the directory containing `alsa.pc'\nto the PKG_CONFIG_PATH environment variable\nNo package 'alsa' found
