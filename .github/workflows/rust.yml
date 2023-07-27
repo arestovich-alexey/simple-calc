@@ -269,7 +269,7 @@ jobs:
         if: contains(matrix.platform.name, 'musl')
         
       - name: Install libasound2-dev on Linux
-        run: sudo apt-get update --yes && sudo apt-get install --yes g++ pkg-config libx11-dev libasound2-dev libudev-dev alsa-lib-devel.aarch64
+        run: sudo apt-get update --yes && sudo apt-get install --yes g++ pkg-config libx11-dev libasound2-dev libudev-dev
         if: contains(matrix.platform.name, 'linux')
 
       - name: Install libunwind8-dev for Android
